@@ -1,0 +1,122 @@
+#include <iostream>
+using namespace std;
+
+class Account {
+protected:
+    int accNo;
+    string name;
+    float balance;
+
+public:
+    void create() {
+        cout << "Enter Account Number: ";
+        cin >> accNo;
+        cout << "Enter Name: ";
+        cin >> name;
+        cout << "Enter Balance: ";
+        cin >> balance;
+    }
+
+    virtual void display() {
+        cout << "\nAccount No: " << accNo;
+        cout << "\nName: " << name;
+        cout << "\nBalance: " << balance << endl;
+    }
+
+    void deposit() {
+        float amt;
+        cout << "Enter amount to deposit: ";
+        cin >> amt;
+        balance += amt;
+    }
+
+    void withdraw() {
+        float amt;
+        cout << "Enter amount to withdraw: ";
+        cin >> amt;
+
+        if (amt <= balance)
+            balance -= amt;
+        else
+            cout << "Insufficient balance\n";
+    }
+
+    int getAccNo() {
+        return accNo;
+    }
+};
+
+class Bank : public Account {
+public:
+    void display() override {   // Polymorphism
+        cout << "\n--- Account Details ---\n";
+        Account::display();
+    }
+};
+
+int main() {
+    Bank b[10];
+    int count = 0;
+    int choice, accNo, i;
+
+    do {
+        cout << "\n--- BANK SYSTEM ---\n";
+        cout << "1. Create Account\n";
+        cout << "2. Display All\n";
+        cout << "3. Search Account\n";
+        cout << "4. Deposit\n";
+        cout << "5. Withdraw\n";
+        cout << "6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            b[count].create();
+            count++;
+            break;
+
+        case 2:
+            for (i = 0; i < count; i++)
+                b[i].display();
+            break;
+
+        case 3:
+            cout << "Enter Account Number: ";
+            cin >> accNo;
+            for (i = 0; i < count; i++) {
+                if (b[i].getAccNo() == accNo)
+                    b[i].display();
+            }
+            break;
+
+        case 4:
+            cout << "Enter Account Number: ";
+            cin >> accNo;
+            for (i = 0; i < count; i++) {
+                if (b[i].getAccNo() == accNo)
+                    b[i].deposit();
+            }
+            break;
+
+        case 5:
+            cout << "Enter Account Number: ";
+            cin >> accNo;
+            for (i = 0; i < count; i++) {
+                if (b[i].getAccNo() == accNo)
+                    b[i].withdraw();
+            }
+            break;
+
+        case 6:
+            cout << "Thank you!\n";
+            break;
+
+        default:
+            cout << "Invalid choice\n";
+        }
+
+    } while (choice != 6);
+
+    return 0;
+}
